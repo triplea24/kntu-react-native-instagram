@@ -1,10 +1,32 @@
 import React from "react";
-import { View, Image, StyleSheet, Dimensions, Button } from "react-native";
+import {
+  View,
+  Image,
+  StyleSheet,
+  Dimensions,
+  Button,
+  BackHandler,
+  Platform
+} from "react-native";
 
 export default class PostScreen extends React.Component {
   static navigationOptions = {
     headerTitle: "Post"
   };
+  componentDidMount() {
+    if (Platform.OS === "android")
+      BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
+  }
+  componentWillUnmount() {
+    if (Platform.OS === "android")
+      BackHandler.removeEventListener(
+        "hardwareBackPress",
+        this.handleBackPress
+      );
+  }
+  handleBackPress() {
+    this.props.navigation.goBack();
+  }
   render() {
     const imageWidth = Dimensions.get("window").width;
     return (
