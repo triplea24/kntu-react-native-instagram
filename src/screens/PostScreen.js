@@ -10,9 +10,9 @@ import {
 } from "react-native";
 
 export default class PostScreen extends React.Component {
-  static navigationOptions = {
-    headerTitle: "Post"
-  };
+  static navigationOptions = ({ navigation }) => ({
+    headerTitle: navigation.state.params.username
+  });
   componentDidMount() {
     if (Platform.OS === "android")
       BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
@@ -29,11 +29,12 @@ export default class PostScreen extends React.Component {
   }
   render() {
     const imageWidth = Dimensions.get("window").width;
+    const { uri } = this.props.navigation.state.params;
     return (
       <View style={styles.container}>
         <Image
           style={{ width: imageWidth, height: imageWidth }}
-          source={{ uri: "https://placekitten.com/g/200/300" }}
+          source={{ uri }}
         />
       </View>
     );

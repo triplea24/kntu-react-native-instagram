@@ -29,7 +29,13 @@ export default class FeedScreen extends Component {
       return (
         <View key={index + ""}>
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("post")}
+            onPress={() =>
+              this.props.navigation.navigate("post", {
+                username,
+                liked,
+                uri: "https://placekitten.com/g/200/300"
+              })
+            }
             style={styles.titleContainer}
           >
             <Image
