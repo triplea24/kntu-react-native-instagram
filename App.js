@@ -1,19 +1,20 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { createStackNavigator, createAppContainer } from "react-navigation";
 
 import FeedScreen from "./src/screens/FeedScreen";
 import PostScreen from "./src/screens/PostScreen";
 
+const AppNavigator = createStackNavigator({
+  feed: { screen: FeedScreen },
+  post: { screen: PostScreen }
+});
+
+const AppContainer = createAppContainer(AppNavigator);
+
 export default class App extends Component {
-  state = {
-    route: "feed"
-  };
   render() {
-    if (this.state.route === "feed")
-      return <FeedScreen navigate={route => this.setState({ route })} />;
-    if (this.state.route === "post")
-      return <PostScreen navigate={route => this.setState({ route })} />;
-    return <View />;
+    return <AppContainer />;
   }
 }
 

@@ -11,6 +11,9 @@ import {
 import { Ionicons } from "@expo/vector-icons/";
 
 export default class FeedScreen extends Component {
+  static navigationOptions = {
+    headerTitle: "Home"
+  };
   state = {
     data: [
       { username: "1", liked: false },
@@ -26,7 +29,7 @@ export default class FeedScreen extends Component {
       return (
         <View key={index + ""}>
           <TouchableOpacity
-            onPress={() => this.props.navigate("post")}
+            onPress={() => this.props.navigation.navigate("post")}
             style={styles.titleContainer}
           >
             <Image
@@ -67,7 +70,7 @@ export default class FeedScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: { marginTop: 20 },
+  container: {},
   titleContainer: {
     alignItems: "center",
     flexDirection: "row",
