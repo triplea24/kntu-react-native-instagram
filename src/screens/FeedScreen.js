@@ -24,8 +24,11 @@ export default class FeedScreen extends Component {
     const imageWidth = Dimensions.get("window").width;
     const images = this.state.data.map(({ username, liked }, index) => {
       return (
-        <View>
-          <View style={styles.titleContainer}>
+        <View key={index + ""}>
+          <TouchableOpacity
+            onPress={() => this.props.navigate("post")}
+            style={styles.titleContainer}
+          >
             <Image
               style={styles.userAvatar}
               source={{ uri: "https://placekitten.com/g/200/300" }}
@@ -34,7 +37,7 @@ export default class FeedScreen extends Component {
             <TouchableOpacity>
               <Ionicons name="ios-more" size={24} />
             </TouchableOpacity>
-          </View>
+          </TouchableOpacity>
           <Image
             style={{ width: imageWidth, height: imageWidth }}
             source={{ uri: "https://placekitten.com/g/200/300" }}
@@ -42,9 +45,11 @@ export default class FeedScreen extends Component {
           <View style={styles.likeContainer}>
             <TouchableOpacity
               onPress={() => {
-                const data = this.state.data;
+                // const data = this.state.data;
+                const { data } = this.state;
                 data[index].liked = !liked;
-                this.setState({ data: data });
+                // this.setState({ data: data });
+                this.setState({ data });
               }}
             >
               <Ionicons
