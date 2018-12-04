@@ -6,7 +6,7 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
-  ScrollView
+  ActivityIndicator
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons/";
 
@@ -18,14 +18,16 @@ export default class FeedScreen extends Component {
     headerTitle: "Home"
   };
   state = {
+    loading: false,
     data: []
   };
   componentDidMount() {
+    this.setState({ loading: true });
     fetchPhotos()
       .then(data => {
-        this.setState({ data });
+        this.setState({ data, loading: false });
       })
-      .catch(({ message }) => console.log(message));
+      .catch(() => this.setState({ loading: false }));
   }
   renderItem = ({ item, index }) => {
     const { id, username, user_avatar, image, caption, liked } = item;
@@ -70,12 +72,18 @@ export default class FeedScreen extends Component {
   };
   render = () => {
     return (
-      <FlatList
-        data={this.state.data}
-        renderItem={this.renderItem}
-        style={styles.container}
-        keyExtractor={({ id }, index) => id + ""}
-      />
+      <React.Fragment>
+        {this.state.loading ? (
+          <ActivityIndicator />
+        ) : (
+          <FlatList
+            data={this.state.data}
+            renderItem={this.renderItem}
+            style={styles.container}
+            keyExtractor={({ id }, index) => id + ""}
+          />
+        )}
+      </React.Fragment>
     );
   };
 }

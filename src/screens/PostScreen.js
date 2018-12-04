@@ -6,7 +6,8 @@ import {
   Dimensions,
   Button,
   BackHandler,
-  Platform
+  Platform,
+  ActivityIndicator
 } from "react-native";
 import axios from "axios";
 import { fetchPost } from "../logics";
@@ -16,13 +17,17 @@ export default class PostScreen extends React.Component {
     headerTitle: "Post"
   });
   state = {
+    loading: false,
     post: {}
   };
   componentDidMount() {
     if (Platform.OS === "android")
       BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
     const { id } = this.props.navigation.state.params;
-    fetchPost(id).then(post => this.setState({ post }));
+    this.setState({ loading: true });
+    fetchPost(id)
+      .then(post => this.setState({ post, loading: false }))
+      .catch(() => this.setState({ loading: false }));
   }
   componentWillUnmount() {
     if (Platform.OS === "android")
@@ -37,12 +42,18 @@ export default class PostScreen extends React.Component {
   render() {
     const imageWidth = Dimensions.get("window").width;
     return (
-      <View style={styles.container}>
-        <Image
-          style={{ width: imageWidth, height: imageWidth }}
-          source={{ uri: this.state.post.image }}
-        />
-      </View>
+      <React.Fragment>
+        {this.state.loading ? (
+          <ActivityIndicator />
+        ) : (
+          <View style={styles.container}>
+            <Image
+              style={{ width: imageWidth, height: imageWidth }}
+              source={{ uri: this.state.post.image }}
+            />
+          </View>
+        )}
+      </React.Fragment>
     );
   }
 }
