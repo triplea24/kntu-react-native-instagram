@@ -9,6 +9,7 @@ import {
   Platform
 } from "react-native";
 import axios from "axios";
+import { fetchPost } from "../logics";
 
 export default class PostScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -21,9 +22,7 @@ export default class PostScreen extends React.Component {
     if (Platform.OS === "android")
       BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
     const { id } = this.props.navigation.state.params;
-    axios
-      .get(`http://localhost:3000/photos?id=${id}`)
-      .then(({ data }) => this.setState({ post: data[0] }));
+    fetchPost(id).then(post => this.setState({ post }));
   }
   componentWillUnmount() {
     if (Platform.OS === "android")

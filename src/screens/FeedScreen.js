@@ -9,7 +9,8 @@ import {
   ScrollView
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons/";
-import axios from "axios";
+
+import { fetchPhotos } from "../logics";
 
 export default class FeedScreen extends Component {
   static navigationOptions = {
@@ -20,9 +21,8 @@ export default class FeedScreen extends Component {
   };
   componentDidMount() {
     // fetch()
-    axios
-      .get("http://localhost:3000/photos")
-      .then(({ data }) => {
+    fetchPhotos()
+      .then(data => {
         this.setState({ data });
       })
       .catch(({ message }) => console.log(message));
