@@ -6,12 +6,14 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
-  ActivityIndicator
+  FlatList
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons/";
 
 import { fetchPhotos } from "../logics";
-import { FlatList } from "react-native-gesture-handler";
+import withLoading from "../HOC/withLoading";
+
+const List = withLoading(FlatList);
 
 export default class FeedScreen extends Component {
   static navigationOptions = {
@@ -72,18 +74,15 @@ export default class FeedScreen extends Component {
   };
   render = () => {
     return (
-      <React.Fragment>
-        {this.state.loading ? (
-          <ActivityIndicator />
-        ) : (
-          <FlatList
-            data={this.state.data}
-            renderItem={this.renderItem}
-            style={styles.container}
-            keyExtractor={({ id }, index) => id + ""}
-          />
-        )}
-      </React.Fragment>
+      <List
+        loading={this.state.loading}
+        // onRefresh={() => console.log("refresh")}
+        // refreshing={true}
+        data={this.state.data}
+        renderItem={this.renderItem}
+        style={styles.container}
+        keyExtractor={({ id }, index) => id + ""}
+      />
     );
   };
 }
