@@ -8,14 +8,22 @@ import {
   BackHandler,
   Platform
 } from "react-native";
+import axios from "axios";
 
 export default class PostScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
-    headerTitle: navigation.state.params.username
+    headerTitle: "Post"
   });
+  state = {
+    post: {}
+  };
   componentDidMount() {
     if (Platform.OS === "android")
       BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
+    const { id } = this.props.navigation.state.params;
+    axios
+      .get(`http://localhost:3000/photos?id=${id}`)
+      .then(({ data }) => this.setState({ post: data[0] }));
   }
   componentWillUnmount() {
     if (Platform.OS === "android")
@@ -29,12 +37,11 @@ export default class PostScreen extends React.Component {
   }
   render() {
     const imageWidth = Dimensions.get("window").width;
-    const { uri } = this.props.navigation.state.params;
     return (
       <View style={styles.container}>
         <Image
           style={{ width: imageWidth, height: imageWidth }}
-          source={{ uri }}
+          source={{ uri: this.state.post.image }}
         />
       </View>
     );

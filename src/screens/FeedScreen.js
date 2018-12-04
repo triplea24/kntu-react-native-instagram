@@ -30,17 +30,11 @@ export default class FeedScreen extends Component {
   render() {
     const imageWidth = Dimensions.get("window").width;
     const images = this.state.data.map(
-      ({ username, user_avatar, image, caption, liked }, index) => {
+      ({ id, username, user_avatar, image, caption, liked }, index) => {
         return (
           <View key={index + ""}>
             <TouchableOpacity
-              onPress={() =>
-                this.props.navigation.navigate("post", {
-                  username,
-                  liked,
-                  uri: image
-                })
-              }
+              onPress={() => this.props.navigation.navigate("post", { id })}
               style={styles.titleContainer}
             >
               <Image style={styles.userAvatar} source={{ uri: user_avatar }} />
