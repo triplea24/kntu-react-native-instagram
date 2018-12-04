@@ -11,6 +11,7 @@ import {
 import { Ionicons } from "@expo/vector-icons/";
 
 import { fetchPhotos } from "../logics";
+import { FlatList } from "react-native-gesture-handler";
 
 export default class FeedScreen extends Component {
   static navigationOptions = {
@@ -20,57 +21,63 @@ export default class FeedScreen extends Component {
     data: []
   };
   componentDidMount() {
-    // fetch()
     fetchPhotos()
       .then(data => {
         this.setState({ data });
       })
       .catch(({ message }) => console.log(message));
   }
-  render() {
+  renderItem = ({ item, index }) => {
+    const { id, username, user_avatar, image, caption, liked } = item;
     const imageWidth = Dimensions.get("window").width;
-    const images = this.state.data.map(
-      ({ id, username, user_avatar, image, caption, liked }, index) => {
-        return (
-          <View key={index + ""}>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("post", { id })}
-              style={styles.titleContainer}
-            >
-              <Image style={styles.userAvatar} source={{ uri: user_avatar }} />
-              <Text style={styles.title}>{username}</Text>
-              <TouchableOpacity>
-                <Ionicons name="ios-more" size={24} />
-              </TouchableOpacity>
-            </TouchableOpacity>
-            <Image
-              style={{ width: imageWidth, height: imageWidth }}
-              source={{ uri: image }}
+
+    return (
+      <View>
+        <TouchableOpacity
+          onPress={() => this.props.navigation.navigate("post", { id })}
+          style={styles.titleContainer}
+        >
+          <Image style={styles.userAvatar} source={{ uri: user_avatar }} />
+          <Text style={styles.title}>{username}</Text>
+          <TouchableOpacity>
+            <Ionicons name="ios-more" size={24} />
+          </TouchableOpacity>
+        </TouchableOpacity>
+        <Image
+          style={{ width: imageWidth, height: imageWidth }}
+          source={{ uri: image }}
+        />
+        <View style={styles.likeContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              // const data = this.state.data;
+              const { data } = this.state;
+              data[index].liked = !liked;
+              // this.setState({ data: data });
+              this.setState({ data });
+            }}
+          >
+            <Ionicons
+              name={liked ? "ios-heart" : "ios-heart-empty"}
+              size={24}
+              color={liked ? "red" : "black"}
             />
-            <View style={styles.likeContainer}>
-              <TouchableOpacity
-                onPress={() => {
-                  // const data = this.state.data;
-                  const { data } = this.state;
-                  data[index].liked = !liked;
-                  // this.setState({ data: data });
-                  this.setState({ data });
-                }}
-              >
-                <Ionicons
-                  name={liked ? "ios-heart" : "ios-heart-empty"}
-                  size={24}
-                  color={liked ? "red" : "black"}
-                />
-              </TouchableOpacity>
-            </View>
-            <Text style={styles.caption}>{caption}</Text>
-          </View>
-        );
-      }
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.caption}>{caption}</Text>
+      </View>
     );
-    return <ScrollView style={styles.container}>{images}</ScrollView>;
-  }
+  };
+  render = () => {
+    return (
+      <FlatList
+        data={this.state.data}
+        renderItem={this.renderItem}
+        style={styles.container}
+        keyExtractor={({ id }, index) => id + ""}
+      />
+    );
+  };
 }
 
 const styles = StyleSheet.create({
