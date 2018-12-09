@@ -21,16 +21,27 @@ export default class FeedScreen extends Component {
   };
   state = {
     loading: false,
+    refresh: false,
     data: []
   };
   componentDidMount() {
-    this.setState({ loading: true });
+    this.fetchData("loading");
+  }
+  fetchData = key => {
+    this.setState({ [key]: true });
     fetchPhotos()
       .then(data => {
-        this.setState({ data, loading: false });
+        this.setState({ data });
       })
-      .catch(() => this.setState({ loading: false }));
-  }
+      .catch(e => console.log(e.message))
+      .then(() => this.setState({ [key]: false }));
+  };
+  refresh = () => {
+    this.setState({ refresh: true });
+    setTimeout(() => {
+      this.fetchData("refresh");
+    }, 5000);
+  };
   renderItem = ({ item, index }) => {
     const { id, username, user_avatar, image, caption, liked } = item;
     const imageWidth = Dimensions.get("window").width;
@@ -76,8 +87,8 @@ export default class FeedScreen extends Component {
     return (
       <List
         loading={this.state.loading}
-        // onRefresh={() => console.log("refresh")}
-        // refreshing={true}
+        onRefresh={this.refresh}
+        refreshing={this.state.refresh}
         data={this.state.data}
         renderItem={this.renderItem}
         style={styles.container}
