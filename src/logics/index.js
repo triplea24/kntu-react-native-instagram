@@ -8,18 +8,22 @@ const cache = {};
 //   }
 //   return axios.get("http://localhost:3000/photos").then(({ data }) => data);
 // };
-export const fetchPhotos = () => {
+export const fetchPhotos = username => {
   return new Promise((resolve, reject) => {
-    if (cache.photos) {
-      // const diff  = new Date() - cache.timestamp;
-      // if(diff < 50000){
-      resolve(cache.photos);
-      // }
+    // if (cache.photos) {
+    //   // const diff  = new Date() - cache.timestamp;
+    //   // if(diff < 50000){
+    //   resolve(cache.photos);
+    //   // }
+    // }
+    let url = "http://localhost:3000/photos?";
+    if (username) {
+      url = url + `username=${username}`;
     }
     axios
-      .get("http://localhost:3000/photos")
+      .get(url)
       .then(({ data }) => {
-        cache.photos = data;
+        // cache.photos = data;
         // cache.timestamp = new Date();
         return data;
       })
