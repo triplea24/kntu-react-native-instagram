@@ -9,8 +9,11 @@ import {
   Platform,
   ActivityIndicator
 } from "react-native";
-import axios from "axios";
 import { fetchPost } from "../logics";
+
+import withLoading from "../HOC/withLoading";
+
+const LoadingView = withLoading(View);
 
 export default class PostScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -42,18 +45,12 @@ export default class PostScreen extends React.Component {
   render() {
     const imageWidth = Dimensions.get("window").width;
     return (
-      <React.Fragment>
-        {this.state.loading ? (
-          <ActivityIndicator />
-        ) : (
-          <View style={styles.container}>
-            <Image
-              style={{ width: imageWidth, height: imageWidth }}
-              source={{ uri: this.state.post.image }}
-            />
-          </View>
-        )}
-      </React.Fragment>
+      <LoadingView loading={this.state.loading} style={styles.container}>
+        <Image
+          style={{ width: imageWidth, height: imageWidth }}
+          source={{ uri: this.state.post.image }}
+        />
+      </LoadingView>
     );
   }
 }
