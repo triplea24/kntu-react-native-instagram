@@ -9,8 +9,9 @@ export default class UserScreen extends React.Component {
     posts: []
   };
   componentDidMount() {
-    const { username } = this.props.navigation.state.params;
+    const { username, user_avatar } = this.props.navigation.state.params;
     fetchPhotos(username).then(posts => this.setState({ posts }));
+    this.setState({ user_avatar });
   }
   renderItem = ({ item, index }) => {
     const { id, image, caption, liked } = item;
@@ -23,10 +24,12 @@ export default class UserScreen extends React.Component {
     );
   };
   render() {
-    const { user_avatar } = this.props.navigation.state.params;
     return (
       <View style={styles.container}>
-        <ProfileImage style={styles.userAvatar} source={{ uri: user_avatar }} />
+        <ProfileImage
+          style={styles.userAvatar}
+          source={{ uri: this.state.user_avatar }}
+        />
         <FlatList
           data={this.state.posts}
           renderItem={this.renderItem}
