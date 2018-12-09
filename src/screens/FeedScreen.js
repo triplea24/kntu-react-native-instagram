@@ -12,6 +12,7 @@ import { Ionicons } from "@expo/vector-icons/";
 
 import { fetchPhotos } from "../logics";
 import withLoading from "../HOC/withLoading";
+import ProfileImage from "../components/ProfileImage";
 
 const List = withLoading(FlatList);
 
@@ -48,16 +49,22 @@ export default class FeedScreen extends Component {
 
     return (
       <View>
-        <TouchableOpacity
-          onPress={() => this.props.navigation.navigate("post", { id })}
+        <View
+          // onPress={() => this.props.navigation.navigate("post", { id })}
           style={styles.titleContainer}
         >
-          <Image style={styles.userAvatar} source={{ uri: user_avatar }} />
+          <TouchableOpacity
+            onPress={() =>
+              this.props.navigation.navigate("user", { username, user_avatar })
+            }
+          >
+            <ProfileImage source={{ uri: user_avatar }} />
+          </TouchableOpacity>
           <Text style={styles.title}>{username}</Text>
           <TouchableOpacity>
             <Ionicons name="ios-more" size={24} />
           </TouchableOpacity>
-        </TouchableOpacity>
+        </View>
         <Image
           style={{ width: imageWidth, height: imageWidth }}
           source={{ uri: image }}
