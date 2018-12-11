@@ -12,7 +12,6 @@ export default class UserScreen extends React.Component {
     const { username, user_avatar } = this.props.navigation.state.params;
     fetchPhotos(username).then(posts => this.setState({ posts }));
     this.setState({ user_avatar });
-    console.log("UserScreen", this.props.screenProps.test);
   }
   renderItem = ({ item, index }) => {
     const { id, image, caption, liked } = item;

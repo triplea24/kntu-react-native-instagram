@@ -13,10 +13,11 @@ import { fetchPost } from "../logics";
 import { Ionicons } from "@expo/vector-icons/";
 
 import withLoading from "../HOC/withLoading";
+import { connect } from "../context/AppContext";
 
 const LoadingView = withLoading(View);
 
-export default class PostScreen extends React.Component {
+export class PostScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: "Post"
   });
@@ -25,16 +26,10 @@ export default class PostScreen extends React.Component {
     post: {}
   };
   componentDidMount() {
-    console.log("PostScreen", this.props.screenProps.test);
-
     if (Platform.OS === "android")
       BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
     const { id } = this.props.navigation.state.params;
-    this.setState({ post: this.props.screenProps.photos[id - 1] });
-    // this.setState({ loading: true });
-    // fetchPost(id)
-    //   .then(post => this.setState({ post, loading: false }))
-    //   .catch(() => this.setState({ loading: false }));
+    this.setState({ post: this.props.value.photos[id - 1] });
   }
   componentWillUnmount() {
     if (Platform.OS === "android")
@@ -56,7 +51,7 @@ export default class PostScreen extends React.Component {
         />
         <TouchableOpacity
           onPress={() => {
-            this.props.screenProps.toggleLike(this.state.post.id - 1);
+            this.props.value.toggleLike(this.state.post.id - 1);
           }}
         >
           <Ionicons
@@ -69,6 +64,8 @@ export default class PostScreen extends React.Component {
     );
   }
 }
+
+export default connect(PostScreen);
 
 const styles = StyleSheet.create({
   container: {

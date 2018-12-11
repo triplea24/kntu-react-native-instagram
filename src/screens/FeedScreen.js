@@ -14,10 +14,11 @@ import { fetchPhotos } from "../logics";
 import withLoading from "../HOC/withLoading";
 import ProfileImage from "../components/ProfileImage";
 import { withTimeout } from "../utils";
+import { Consumer, connect } from "../context/AppContext";
 
 const List = withLoading(FlatList);
 
-export default class FeedScreen extends Component {
+export class FeedScreen extends Component {
   static navigationOptions = {
     headerTitle: "Home"
   };
@@ -27,15 +28,13 @@ export default class FeedScreen extends Component {
     data: []
   };
   componentDidMount() {
-    console.log("FeedScreen", this.props.screenProps.test);
-    this.fetchData("loading");
+    this.fetchData("loading")(this.props.value.updatePhotos);
   }
-  fetchData = key => {
+  fetchData = key => updatePhotos => {
     this.setState({ [key]: true });
     withTimeout(fetchPhotos())
       .then(data => {
-        this.props.screenProps.updatePhotos(data);
-        // this.setState({ data });
+        if (updatePhotos) updatePhotos(data);
       })
       .catch(e => console.log(e.message))
       .then(() => this.setState({ [key]: false }));
@@ -43,7 +42,7 @@ export default class FeedScreen extends Component {
   refresh = () => {
     this.setState({ refresh: true });
     setTimeout(() => {
-      this.fetchData("refresh");
+      this.fetchData("refresh")(this.props.value.updatePhotos);
     }, 5000);
   };
   renderItem = ({ item, index }) => {
@@ -74,7 +73,7 @@ export default class FeedScreen extends Component {
         <View style={styles.likeContainer}>
           <TouchableOpacity
             onPress={() => {
-              this.props.screenProps.toggleLike(index);
+              this.props.value.toggleLike(index);
             }}
           >
             <Ionicons
@@ -94,15 +93,17 @@ export default class FeedScreen extends Component {
         loading={this.state.loading}
         onRefresh={this.refresh}
         refreshing={this.state.refresh}
-        data={this.props.screenProps.photos}
+        data={this.props.value.photos}
         renderItem={this.renderItem}
         style={styles.container}
-        extraData={this.props.screenProps}
+        extraData={this.props.value}
         keyExtractor={({ id }, index) => id + ""}
       />
     );
   };
 }
+
+export default connect(FeedScreen);
 
 const styles = StyleSheet.create({
   container: {},
