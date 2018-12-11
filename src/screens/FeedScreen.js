@@ -14,7 +14,7 @@ import { fetchPhotos } from "../logics";
 import withLoading from "../HOC/withLoading";
 import ProfileImage from "../components/ProfileImage";
 import { withTimeout } from "../utils";
-import { Consumer, connect } from "../context/AppContext";
+import { connect } from "../context/AppContext";
 
 const List = withLoading(FlatList);
 
@@ -28,13 +28,13 @@ export class FeedScreen extends Component {
     data: []
   };
   componentDidMount() {
-    this.fetchData("loading")(this.props.value.updatePhotos);
+    this.fetchData("loading");
   }
-  fetchData = key => updatePhotos => {
+  fetchData = key => {
     this.setState({ [key]: true });
     withTimeout(fetchPhotos())
       .then(data => {
-        if (updatePhotos) updatePhotos(data);
+        if (this.props.updatePhotos) this.props.updatePhotos(data);
       })
       .catch(e => console.log(e.message))
       .then(() => this.setState({ [key]: false }));
@@ -42,7 +42,7 @@ export class FeedScreen extends Component {
   refresh = () => {
     this.setState({ refresh: true });
     setTimeout(() => {
-      this.fetchData("refresh")(this.props.value.updatePhotos);
+      this.fetchData("refresh");
     }, 5000);
   };
   renderItem = ({ item, index }) => {
@@ -73,7 +73,7 @@ export class FeedScreen extends Component {
         <View style={styles.likeContainer}>
           <TouchableOpacity
             onPress={() => {
-              this.props.value.toggleLike(index);
+              this.props.toggleLike(index);
             }}
           >
             <Ionicons
@@ -93,17 +93,23 @@ export class FeedScreen extends Component {
         loading={this.state.loading}
         onRefresh={this.refresh}
         refreshing={this.state.refresh}
-        data={this.props.value.photos}
+        data={this.props.photos}
         renderItem={this.renderItem}
         style={styles.container}
-        extraData={this.props.value}
+        extraData={this.props}
         keyExtractor={({ id }, index) => id + ""}
       />
     );
   };
 }
 
-export default connect(FeedScreen);
+const mapStateToProps = state => ({
+  photos: state.photos,
+  toggleLike: state.toggleLike,
+  updatePhotos: state.updatePhotos
+});
+
+export default connect(mapStateToProps)(FeedScreen);
 
 const styles = StyleSheet.create({
   container: {},

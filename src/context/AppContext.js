@@ -2,12 +2,17 @@ import React from "react";
 
 const { Provider, Consumer } = React.createContext("App");
 
-export const connect = WrrappedComponent => {
+export const connect = mapStateToProps => WrrappedComponent => {
   return class ConnectedComponent extends React.Component {
     render() {
       return (
         <Consumer>
-          {value => <WrrappedComponent value={value} {...this.props} />}
+          {value => {
+            const injectedProps = mapStateToProps
+              ? mapStateToProps(value)
+              : value;
+            return <WrrappedComponent {...injectedProps} {...this.props} />;
+          }}
         </Consumer>
       );
     }

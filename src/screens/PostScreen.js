@@ -29,7 +29,7 @@ export class PostScreen extends React.Component {
     if (Platform.OS === "android")
       BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
     const { id } = this.props.navigation.state.params;
-    this.setState({ post: this.props.value.photos[id - 1] });
+    this.setState({ post: this.props.photos[id - 1] });
   }
   componentWillUnmount() {
     if (Platform.OS === "android")
@@ -51,7 +51,7 @@ export class PostScreen extends React.Component {
         />
         <TouchableOpacity
           onPress={() => {
-            this.props.value.toggleLike(this.state.post.id - 1);
+            this.props.toggleLike(this.state.post.id - 1);
           }}
         >
           <Ionicons
@@ -65,7 +65,13 @@ export class PostScreen extends React.Component {
   }
 }
 
-export default connect(PostScreen);
+const mapStateToProps = state => ({
+  photos: state.photos,
+  toggleLike: state.toggleLike,
+  updatePhotos: state.updatePhotos
+});
+
+export default connect(mapStateToProps)(PostScreen);
 
 const styles = StyleSheet.create({
   container: {
