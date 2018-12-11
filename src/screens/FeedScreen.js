@@ -13,6 +13,7 @@ import { Ionicons } from "@expo/vector-icons/";
 import { fetchPhotos } from "../logics";
 import withLoading from "../HOC/withLoading";
 import ProfileImage from "../components/ProfileImage";
+import { withTimeout } from "../utils";
 
 const List = withLoading(FlatList);
 
@@ -30,7 +31,7 @@ export default class FeedScreen extends Component {
   }
   fetchData = key => {
     this.setState({ [key]: true });
-    fetchPhotos()
+    withTimeout(fetchPhotos())
       .then(data => {
         this.setState({ data });
       })
