@@ -7,9 +7,10 @@ import {
   Button,
   BackHandler,
   Platform,
-  ActivityIndicator
+  TouchableOpacity
 } from "react-native";
 import { fetchPost } from "../logics";
+import { Ionicons } from "@expo/vector-icons/";
 
 import withLoading from "../HOC/withLoading";
 
@@ -24,13 +25,16 @@ export default class PostScreen extends React.Component {
     post: {}
   };
   componentDidMount() {
+    console.log("PostScreen", this.props.screenProps.test);
+
     if (Platform.OS === "android")
       BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
     const { id } = this.props.navigation.state.params;
-    this.setState({ loading: true });
-    fetchPost(id)
-      .then(post => this.setState({ post, loading: false }))
-      .catch(() => this.setState({ loading: false }));
+    this.setState({ post: this.props.screenProps.photos[id - 1] });
+    // this.setState({ loading: true });
+    // fetchPost(id)
+    //   .then(post => this.setState({ post, loading: false }))
+    //   .catch(() => this.setState({ loading: false }));
   }
   componentWillUnmount() {
     if (Platform.OS === "android")
@@ -50,6 +54,17 @@ export default class PostScreen extends React.Component {
           style={{ width: imageWidth, height: imageWidth }}
           source={{ uri: this.state.post.image }}
         />
+        <TouchableOpacity
+          onPress={() => {
+            this.props.screenProps.toggleLike(this.state.post.id - 1);
+          }}
+        >
+          <Ionicons
+            name={this.state.post.liked ? "ios-heart" : "ios-heart-empty"}
+            size={24}
+            color={this.state.post.liked ? "red" : "black"}
+          />
+        </TouchableOpacity>
       </LoadingView>
     );
   }

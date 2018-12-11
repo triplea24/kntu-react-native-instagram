@@ -27,13 +27,15 @@ export default class FeedScreen extends Component {
     data: []
   };
   componentDidMount() {
+    console.log("FeedScreen", this.props.screenProps.test);
     this.fetchData("loading");
   }
   fetchData = key => {
     this.setState({ [key]: true });
     withTimeout(fetchPhotos())
       .then(data => {
-        this.setState({ data });
+        this.props.screenProps.updatePhotos(data);
+        // this.setState({ data });
       })
       .catch(e => console.log(e.message))
       .then(() => this.setState({ [key]: false }));
@@ -50,10 +52,7 @@ export default class FeedScreen extends Component {
 
     return (
       <View>
-        <View
-          // onPress={() => this.props.navigation.navigate("post", { id })}
-          style={styles.titleContainer}
-        >
+        <View style={styles.titleContainer}>
           <TouchableOpacity
             onPress={() =>
               this.props.navigation.navigate("user", { username, user_avatar })
@@ -62,7 +61,9 @@ export default class FeedScreen extends Component {
             <ProfileImage source={{ uri: user_avatar }} />
           </TouchableOpacity>
           <Text style={styles.title}>{username}</Text>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate("post", { id })}
+          >
             <Ionicons name="ios-more" size={24} />
           </TouchableOpacity>
         </View>
@@ -73,11 +74,7 @@ export default class FeedScreen extends Component {
         <View style={styles.likeContainer}>
           <TouchableOpacity
             onPress={() => {
-              // const data = this.state.data;
-              const { data } = this.state;
-              data[index].liked = !liked;
-              // this.setState({ data: data });
-              this.setState({ data });
+              this.props.screenProps.toggleLike(index);
             }}
           >
             <Ionicons
@@ -97,9 +94,10 @@ export default class FeedScreen extends Component {
         loading={this.state.loading}
         onRefresh={this.refresh}
         refreshing={this.state.refresh}
-        data={this.state.data}
+        data={this.props.screenProps.photos}
         renderItem={this.renderItem}
         style={styles.container}
+        extraData={this.props.screenProps}
         keyExtractor={({ id }, index) => id + ""}
       />
     );

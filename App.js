@@ -34,8 +34,26 @@ const AppNavigator = createBottomTabNavigator(
 const AppContainer = createAppContainer(AppNavigator);
 
 export default class App extends Component {
+  state = {
+    photos: []
+  };
+  updatePhotos = photos => {
+    this.setState({ photos });
+  };
+  toggleLike = index => {
+    const { photos } = this.state;
+    const { liked } = photos[index];
+    photos[index].liked = !liked;
+    this.setState({ photos });
+  };
   render() {
-    return <AppContainer />;
+    const value = {
+      photos: this.state.photos,
+      updatePhotos: this.updatePhotos,
+      toggleLike: this.toggleLike
+    };
+    console.log("this.state", this.state);
+    return <AppContainer screenProps={value} />;
   }
 }
 
