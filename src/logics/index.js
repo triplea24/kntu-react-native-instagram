@@ -40,3 +40,12 @@ export const fetchPost = id => {
       .catch(e => reject(e));
   });
 };
+
+export const fetchUsers = username => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`http://localhost:3000/users?username=${username}`)
+      .then(({ data }) => resolve(data[0]))
+      .catch(e => reject(e));
+  });
+};

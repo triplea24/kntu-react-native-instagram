@@ -2,14 +2,17 @@
 	"users": [{
 		"id": 1,
 		"username": "aj_crush",
+		"password": "123456",
 		"user_avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg"
 	}, {
 		"id": 2,
 		"username": "nicols89",
+		"password": "123456",
 		"user_avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/kfriedson/128.jpg"
 	}, {
 		"id": 3,
 		"username": "junkook._",
+		"password": "123456",
 		"user_avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg"
 	}],
 	"photos": [{

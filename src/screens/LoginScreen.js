@@ -1,12 +1,25 @@
 import React from "react";
-import { View, TextInput, Text, StyleSheet } from "react-native";
+import { View, TextInput, Text, StyleSheet, Button } from "react-native";
 import { Constants } from "expo";
 import { connect } from "react-redux";
 
 import store from "../store";
-import { changeField } from "../actions";
+import { changeField, changeAuthStatus } from "../actions";
+import { fetchUsers } from "../logics";
 
 class LoginScreen extends React.Component {
+  handleSubmit = () => {
+    const { username, password } = this.props;
+    fetchUsers(username)
+      .then(user => {
+        const isValid = password === user.password;
+        if (isValid) {
+          store.dispatch(changeAuthStatus(true));
+          this.props.navigation.navigate("App");
+        }
+      })
+      .catch(e => console.log(e.message));
+  };
   render() {
     return (
       <View style={styles.container}>
@@ -26,6 +39,11 @@ class LoginScreen extends React.Component {
           onChangeText={password =>
             store.dispatch(changeField("password", password))
           }
+        />
+        <Button
+          title={"Submit"}
+          onPress={this.handleSubmit}
+          style={{ marginTop: 10 }}
         />
       </View>
     );
