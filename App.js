@@ -6,14 +6,11 @@ import {
   createBottomTabNavigator,
   createSwitchNavigator
 } from "react-navigation";
-import { createStore, combineReducers } from "redux";
 import { Provider } from "react-redux";
 
-import FeedScreen from "./src/screens/FeedScreen";
-import PostScreen from "./src/screens/PostScreen";
-import UserScreen from "./src/screens/UserScreen";
-import LoginScreen from "./src/screens/LoginScreen";
-import { AppProvider } from "./src/context/AppContext";
+import { LoginScreen, FeedScreen, PostScreen, UserScreen } from "@screens";
+import { AppProvider } from "@context/AppContext";
+import store from "./src/store";
 
 const FeedNavigator = createStackNavigator({
   feed: { screen: FeedScreen },
@@ -42,19 +39,6 @@ const AppNavigator = createSwitchNavigator({
 });
 
 const AppContainer = createAppContainer(AppNavigator);
-
-const auth = (state = { username: "", password: "" }, action) => {
-  switch (action.type) {
-    case "CHANGE_FIELD":
-      return { ...state, [action.field]: action.payload };
-  }
-  return state;
-};
-
-export const store = createStore(combineReducers({ auth }));
-
-store.subscribe(() => console.log("store", store.getState()));
-// store.dispatch({ type: "INCREMENT1", payload: 5 });
 
 export default class App extends Component {
   render() {

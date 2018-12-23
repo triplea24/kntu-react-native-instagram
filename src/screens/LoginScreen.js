@@ -3,13 +3,8 @@ import { View, TextInput, Text, StyleSheet } from "react-native";
 import { Constants } from "expo";
 import { connect } from "react-redux";
 
-import { store } from "../../App";
-
-const changeField = (field, payload) => ({
-  type: "CHANGE_FIELD",
-  field,
-  payload
-});
+import store from "../store";
+import { changeField } from "../actions";
 
 class LoginScreen extends React.Component {
   render() {
