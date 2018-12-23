@@ -4,7 +4,7 @@ import { Constants } from "expo";
 import { connect } from "react-redux";
 
 import store from "../store";
-import { changeField, changeAuthStatus } from "../actions";
+import { changeField, changeAuthStatus, loginUser } from "../actions";
 import { fetchUsers } from "../logics";
 
 class LoginScreen extends React.Component {
@@ -15,6 +15,7 @@ class LoginScreen extends React.Component {
         const isValid = password === user.password;
         if (isValid) {
           store.dispatch(changeAuthStatus(true));
+          store.dispatch(loginUser(user));
           this.props.navigation.navigate("App");
         }
       })
