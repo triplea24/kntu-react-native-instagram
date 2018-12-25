@@ -3,7 +3,6 @@ import { View, TextInput, Text, StyleSheet, Button } from "react-native";
 import { Constants } from "expo";
 import { connect } from "react-redux";
 
-import store from "../store";
 import { changeField, changeAuthStatus, loginUser } from "../actions";
 import { fetchUsers } from "../logics";
 
@@ -14,8 +13,8 @@ class LoginScreen extends React.Component {
       .then(user => {
         const isValid = password === user.password;
         if (isValid) {
-          store.dispatch(changeAuthStatus(true));
-          store.dispatch(loginUser(user));
+          this.props.changeAuthStatus(true);
+          this.props.loginUser(user);
           this.props.navigation.navigate("App");
         }
       })
@@ -30,7 +29,7 @@ class LoginScreen extends React.Component {
           style={{ margin: 5, backgroundColor: "#cccccc" }}
           value={this.props.username}
           onChangeText={username =>
-            store.dispatch(changeField("username", username))
+            this.props.changeField("username", username)
           }
         />
         <Text>Password: </Text>
@@ -38,7 +37,7 @@ class LoginScreen extends React.Component {
           style={{ margin: 5, backgroundColor: "#cccccc" }}
           value={this.props.password}
           onChangeText={password =>
-            store.dispatch(changeField("password", password))
+            this.props.changeField("password", password)
           }
         />
         <Button
@@ -56,7 +55,14 @@ const mapStateToProps = state => ({
   username: state.auth.username
 });
 
-export default connect(mapStateToProps)(LoginScreen);
+// const mapDispatchToProps = dispatch => ({
+//   changeAuthStatus: () => dispatch(changeAuthStatus(true))
+// });
+
+export default connect(
+  mapStateToProps,
+  { changeField, changeAuthStatus, loginUser }
+)(LoginScreen);
 
 const styles = StyleSheet.create({
   container: { flex: 1, marginTop: Constants.statusBarHeight }
