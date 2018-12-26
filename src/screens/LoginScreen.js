@@ -18,6 +18,11 @@ class LoginScreen extends React.Component {
     const { username, password } = this.props;
     this.props.loginUser(username, password);
   };
+  componentDidMount() {
+    if (this.props.isAuthenticated) {
+      this.props.navigation.navigate("App");
+    }
+  }
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.props.isAuthenticated) {
       this.props.navigation.navigate("App");
