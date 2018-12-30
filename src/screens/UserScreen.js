@@ -13,6 +13,7 @@ import { connect } from "react-redux";
 
 import ProfileImage from "../components/ProfileImage";
 import { fetchPhotos } from "../logics";
+import { makeCancelable } from "../utils";
 
 class Profile extends React.Component {
   constructor(props) {
@@ -34,9 +35,13 @@ class Profile extends React.Component {
   componentDidMount() {
     if (this.state.posts) return;
     const { username } = this.props;
-    fetchPhotos(username)
+    this.task = makeCancelable(fetchPhotos(username));
+    this.task.promise
       .then(posts => this.setState({ posts }))
       .catch(error => console.log(error.message));
+  }
+  componentWillUnmount() {
+    this.task && this.task.cancel();
   }
   render() {
     return (
@@ -67,11 +72,12 @@ export class UserScreen extends React.Component {
       isOwnProfile: !props.navigation.getParam("username") ? true : null
     };
   }
+  isMounted = false;
   componentDidMount() {
     if (this.state.isOwnProfile !== null) {
       return;
     }
-
+    // this.isMounted = true;
     // const
     let username, user_avatar, isOwnProfile;
     if (this.state.isOwnProfile) {
@@ -83,11 +89,17 @@ export class UserScreen extends React.Component {
       user_avatar = this.props.navigation.getParam("user_avatar");
       isOwnProfile = false;
     }
-    fetchPhotos(username)
+    this.task = makeCancelable(fetchPhotos(username));
+    this.task.promise
       .then(posts =>
+        // this.isMounted &&
         this.setState({ isOwnProfile, posts, loaded: true, user_avatar })
       )
       .catch(error => console.log(error.message));
+  }
+  componentWillUnmount() {
+    // this.isMounted = false;
+    this.task && this.task.cancel();
   }
 
   render() {
