@@ -15,13 +15,14 @@ import {
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
-import { DangerZone } from "expo";
+import { DangerZone, Notifications } from "expo";
 let { Lottie } = DangerZone;
 
 import reducers from "./src/reducers";
 
 import { LoginScreen, FeedScreen, PostScreen, UserScreen } from "@screens";
 import { AppProvider } from "@context/AppContext";
+import { registerForPushNotifications } from "./src/logics";
 
 const FeedNavigator = createStackNavigator({
   feed: { screen: FeedScreen },
@@ -59,6 +60,7 @@ class SplashScreen extends Component {
         duration: 3000 // Make it take a while
       }
     ).start();
+    registerForPushNotifications();
   }
   render() {
     return (
@@ -84,14 +86,24 @@ export default class App extends Component {
     AppState.addEventListener("change", this._handleAppStateChange);
     setTimeout(() => {
       AsyncStorage.getItem(REDUX_STORE_STORAGE_NAME, (err, result) => {
-        const state = JSON.parse(result);
+        const state = JSON.parse(result) || {};
         console.log("persisted state", state);
         const store = createStore(reducers, state, applyMiddleware(thunk));
         this.setState({ isLoaded: true, store });
         store.subscribe(() => console.log("redux store", store.getState()));
       });
     }, 1);
+    this._notificationSubscription = Notifications.addListener(
+      this._handleNotification
+    );
   }
+  _handleNotification = ({ data }) => {
+    // console.log(notification);
+    Notifications.presentLocalNotificationAsync({
+      title: data.title,
+      body: data.body
+    });
+  };
   componentWillUnmount() {
     AppState.removeEventListener("change", this._handleAppStateChange);
   }
