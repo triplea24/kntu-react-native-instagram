@@ -10,23 +10,20 @@
 	
 3. Install node packages
 	
-		yarn (install)
+		yarn (install) || npm install
 	
-	or	
-	
-		npm install
 	
 4. Run the project
 
-		expo start
+		expo start || yarn start
 
 
 ### Run the server
 
-1. install [`json-server`](https://github.com/typicode/json-server) node module
+1. Install [`json-server`](https://github.com/typicode/json-server) node module
 		
 		npm install -g json-server
 		
-2. use `json-server` to start server
+2. Use `json-server` to start the server or you can use the pre-defined script with yarn
 
-		json-server db.json
+		yarn server || json-server server/db.json --watch
