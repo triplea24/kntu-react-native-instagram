@@ -17,6 +17,17 @@ import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { DangerZone, Notifications } from "expo";
 let { Lottie } = DangerZone;
+import { Localization } from "expo-localization";
+import i18n from "i18n-js";
+const en = {
+  hello: "Hello"
+};
+const fr = {
+  hello: "Bonjours"
+};
+
+i18n.fallbacks = true;
+i18n.translations = { fr, en };
 
 import reducers from "./src/reducers";
 
@@ -90,7 +101,10 @@ export default class App extends Component {
         console.log("persisted state", state);
         const store = createStore(reducers, state, applyMiddleware(thunk));
         this.setState({ isLoaded: true, store });
-        store.subscribe(() => console.log("redux store", store.getState()));
+        store.subscribe(() => {
+          i18n.locale = store.getState().locale;
+          console.log(store.getState());
+        });
       });
     }, 1);
     this._notificationSubscription = Notifications.addListener(
@@ -131,6 +145,7 @@ export default class App extends Component {
     if (!this.state.isLoaded) {
       return <SplashScreen />;
     }
+
     // console.log("app state", this.state.store.getState());
     return (
       <AppProvider>

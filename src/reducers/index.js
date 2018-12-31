@@ -3,4 +3,9 @@ import { combineReducers } from "redux";
 import auth from "./auth";
 import user from "./user";
 
-export default combineReducers({ auth, user });
+const locale = (state = "en", action) => {
+  if (action.type === "CHANGE_LOCALE") return action.payload;
+  return state;
+};
+
+export default combineReducers({ auth, user, locale });

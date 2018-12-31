@@ -56,3 +56,10 @@ export const loginUser = (username, password) => dispatch => {
       })
     );
 };
+
+export const changeLocale = locale => dispatch => {
+  dispatch({
+    type: "CHANGE_LOCALE",
+    payload: locale
+  });
+};

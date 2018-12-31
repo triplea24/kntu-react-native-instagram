@@ -1,5 +1,14 @@
 import React from "react";
-import { View, StyleSheet, FlatList, Dimensions, Image } from "react-native";
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Dimensions,
+  Image,
+  Button,
+  Text
+} from "react-native";
+import i18n from "i18n-js";
 
 import ProfileImage from "./ProfileImage";
 import { fetchPhotos } from "../logics";
@@ -34,6 +43,7 @@ export default class Profile extends React.Component {
     this.task && this.task.cancel();
   }
   render() {
+    console.log("this.props", this.props);
     return (
       <View style={styles.container}>
         <ProfileImage
@@ -41,6 +51,15 @@ export default class Profile extends React.Component {
           source={{
             uri: this.props.user_avatar
           }}
+        />
+        <Text>{i18n.t("hello")}</Text>
+        <Button
+          title={"Change to en"}
+          onPress={() => this.props.changeLocale("en")}
+        />
+        <Button
+          title={"Change to fr"}
+          onPress={() => this.props.changeLocale("fr")}
         />
         <FlatList
           data={this.state.posts}

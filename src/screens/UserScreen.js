@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import Profile from "../components/Profile";
 import { fetchPhotos } from "../logics";
 import { makeCancelable } from "../utils";
+import { changeLocale } from "../actions";
 
 export class UserScreen extends React.Component {
   constructor(props) {
@@ -56,6 +57,7 @@ export class UserScreen extends React.Component {
     const user_avatar = this.props.navigation.getParam("user_avatar");
     return (
       <Profile
+        changeLocale={this.props.changeLocale}
         username={username}
         user_avatar={user_avatar}
         posts={this.state.posts}
@@ -66,7 +68,11 @@ export class UserScreen extends React.Component {
 
 const mapStateToProps = state => ({
   username: state.user.username,
-  user_avatar: state.user.user_avatar
+  user_avatar: state.user.user_avatar,
+  locale: state.locale
 });
 
-export default connect(mapStateToProps)(UserScreen);
+export default connect(
+  mapStateToProps,
+  { changeLocale }
+)(UserScreen);
