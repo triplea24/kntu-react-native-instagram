@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Permissions, Notifications } from "expo";
 
-const SERVER_ENDPOINT = "http://192.168.43.212:3000";
+const SERVER_ENDPOINT = "http://localhost:3000";
 
 const cache = {};
 // export const fetchPhotos = async () => {
