@@ -5,7 +5,10 @@
     "slug": "InstagramClone",
     "privacy": "public",
     "sdkVersion": "31.0.0",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,7 +24,21 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "ir.ac.kntu.instagram",
+      "publishBundlePath": "ios/instagramclone/Supporting/shell-app.bundle",
+      "publishManifestPath": "ios/instagramclone/Supporting/shell-app-manifest.json"
+    },
+    "isDetached": true,
+    "detach": {
+      "iosExpoViewUrl": "https://s3.amazonaws.com/exp-exponent-view-code/ios-v2.9.0-sdk31.0.0-250a3991-b623-4f9c-b07f-0b9ed7e8c4c9.tar.gz",
+      "androidExpoViewUrl": "https://s3.amazonaws.com/exp-exponent-view-code/android-v2.9.2-sdk31.0.0-d1776f37-d524-4fee-872d-6807b0fd83ff.tar.gz"
+    },
+    "scheme": "expc683a8671b844337a80e6e66ea72288a",
+    "android": {
+      "package": "ir.ac.kntu.instagram",
+      "publishBundlePath": "android/app/src/main/assets/shell-app.bundle",
+      "publishManifestPath": "android/app/src/main/assets/shell-app-manifest.json"
     }
   }
 }
