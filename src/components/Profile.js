@@ -13,6 +13,15 @@ import i18n from "i18n-js";
 import ProfileImage from "./ProfileImage";
 import { fetchPhotos } from "../logics";
 import { makeCancelable } from "../utils";
+import onlyIfAuthenticated from "../HOC/onlyIfAuthenticated";
+
+const MyButton = onlyIfAuthenticated(
+  class MyButton extends React.Component {
+    render() {
+      return <Text>onlyIfAuthenticated</Text>;
+    }
+  }
+);
 
 export default class Profile extends React.Component {
   constructor(props) {
@@ -52,6 +61,7 @@ export default class Profile extends React.Component {
             uri: this.props.user_avatar
           }}
         />
+        <MyButton />
         <Text>{i18n.t("hello")}</Text>
         <Button
           title={"Change to en"}
